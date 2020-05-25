@@ -8,7 +8,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Show CIRCLE branch
+          name: Show current branch
           command: echo ${CIRCLE_BRANCH}
       - restore_cache:
           keys:
@@ -25,7 +25,7 @@ jobs:
   deploy-to-aws-s3:
     working_directory: ~/repo
     docker:
-      -image: circleci/node:13.13.0
+      - image: circleci/node:13.12.0
     steps:
       - checkout
       - run:
@@ -58,14 +58,15 @@ jobs:
             else 
               aws --region ${AWS_REGION} s3 sync ~/repo/build s3://${AWS_BUCKET_DEV} --delete
             fi
+
   deploy-to-aws-cloudfront:
     working_directory: ~/repo
     docker:
-      -image: circleci/node:13.13.0
+      - image: circleci/node:13.12.0
     steps:
       - checkout
       - run:
-          name: Show CIRCLE branch
+          name: Show current branch
           command: echo ${CIRCLE_BRANCH}
       - run:
           name: Install AWS CLI
