@@ -1,7 +1,7 @@
 .header-nav-wrapper {
   width: 100%;
   top: 0;
-  background-color: #fff;
+  background-color: var(--mainWhite);
   position: sticky;
   z-index: 20;
 }
@@ -12,7 +12,7 @@
   grid-template-columns: max-content 1fr 1fr max-content max-content;
   height: 50px;
   line-height: 50px;
-  color: #000;
+  color: var(--mainBlack);
 }
 
 .header-image {
@@ -37,7 +37,7 @@
   }
 
   .active-item {
-    color: #3498db;
+    color: var(--primaryColor);
   }
 }
 
@@ -49,13 +49,13 @@
 }
 
 .header-nav-item a:hover {
-  color: #3498db;
+  color: var(--primaryColor);
 }
 
 .header-menu-toggle .bar {
   width: 25px;
   height: 3px;
-  background-color: #3f3f3f;
+  background-color: var(--mainBlack);
   margin: 5px auto;
   -webkit-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
@@ -95,12 +95,11 @@
   grid-area: search;
   margin: auto;
   width: auto;
-  border: 1px solid #9aa9bb;
+  border: 1px solid var(--borderColor);
   padding: 5px;
   height: 36px;
   border-radius: 5px;
   outline: none;
-  color: #9dbfaf;
   line-height: 36px;
 }
 
@@ -118,7 +117,7 @@
     flex-direction: column;
     position: fixed;
     top: 55px;
-    background-color: #fff;
+    background-color: var(--mainWhite);
     width: 100%;
     height: calc(100vh - 55px);
     transform: translate(-101%);
