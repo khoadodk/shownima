@@ -12,7 +12,7 @@
 .disable {
   cursor: none;
   pointer-events: none;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--mainGrey);
 }
 
 .pageCount {
