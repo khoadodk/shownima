@@ -3,9 +3,11 @@ import {
   SET_ERROR,
   MOVIE_PAGE,
   LOAD_MORE,
-  MOVIE_TYPE
+  MOVIE_TYPE,
+  SEARCH_RESULT,
+  SEARCH_QUERY
 } from '../types';
-import { MOVIE_API_URL } from '../../services/movies.service';
+import { MOVIE_API_URL, SEARCH_API_URL } from '../../services/movies.service';
 
 export const getMovies = (type, pages) => async (dispatch) => {
   try {
@@ -43,4 +45,25 @@ export const setMoviePage = (page, totalPages) => async (dispatch) => {
 export const setMovieType = (type) => async (dispatch) => {
   console.log('SET MOVIE TYPE ACTION', type);
   dispatch({ type: MOVIE_TYPE, payload: type });
+};
+
+export const searchQuery = (query) => async (dispatch) => {
+  console.log('SEARCH QUERY ACTION', query);
+  dispatch({ type: SEARCH_QUERY, payload: query });
+};
+
+export const searchResult = (query) => async (dispatch) => {
+  try {
+    if (query) {
+      const response = await SEARCH_API_URL(query);
+      const { results } = response.data;
+      dispatch({ type: SEARCH_RESULT, payload: results });
+    } else {
+      dispatch({ type: SEARCH_RESULT, payload: [] });
+    }
+  } catch (error) {
+    if (error.response) {
+      dispatch({ type: SET_ERROR, payload: error.response.data.message });
+    }
+  }
 };

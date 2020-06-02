@@ -1,10 +1,19 @@
-import { MOVIE_LIST, MOVIE_PAGE, LOAD_MORE, MOVIE_TYPE } from '../types';
+import {
+  MOVIE_LIST,
+  MOVIE_PAGE,
+  LOAD_MORE,
+  MOVIE_TYPE,
+  SEARCH_QUERY,
+  SEARCH_RESULT
+} from '../types';
 
 const initialState = {
   list: [],
   page: 1,
   totalPages: 0,
-  movieType: 'now_playing'
+  movieType: 'now_playing',
+  searchQuery: '',
+  searchResult: []
 };
 
 export default (state = initialState, action) => {
@@ -32,6 +41,17 @@ export default (state = initialState, action) => {
       return {
         ...state,
         movieType: action.payload
+      };
+    case SEARCH_QUERY:
+      return {
+        ...state,
+        searchQuery: action.payload
+      };
+    case SEARCH_RESULT:
+      console.log(action.payload);
+      return {
+        ...state,
+        searchResult: action.payload
       };
     default:
       return state;

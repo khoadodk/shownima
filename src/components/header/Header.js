@@ -6,7 +6,9 @@ import logo from '../../assets/logo.JPG';
 import {
   getMovies,
   setMovieType,
-  setMoviePage
+  setMoviePage,
+  searchQuery,
+  searchResult
 } from '../../redux/actions/movies';
 
 const HEADER_LIST = [
@@ -41,10 +43,13 @@ const Header = ({
   setMoviePage,
   setMovieType,
   page,
-  totalPages
+  totalPages,
+  searchQuery,
+  searchResult
 }) => {
   let [navClass, setNavClass] = useState(false);
   let [menuClass, setMenuClass] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [type, setType] = useState('now_playing');
 
   useEffect(() => {
@@ -52,6 +57,15 @@ const Header = ({
     setMoviePage(page, totalPages);
     // eslint-disable-next-line
   }, [type]);
+
+  const handleSearchChange = (e) => {
+    let query = e.target.value;
+    setSearchTerm(query);
+    setTimeout(() => {
+      searchQuery(query);
+      searchResult(query);
+    }, 500);
+  };
 
   const setMovieTypeUrl = (type) => {
     setType(type);
@@ -114,6 +128,8 @@ const Header = ({
             type="text"
             className="search-input"
             placeholder="Search A Movie"
+            value={searchTerm}
+            onChange={handleSearchChange}
           />
         </ul>
       </div>
@@ -126,7 +142,9 @@ Header.propTypes = {
   setMovieType: PropTypes.func.isRequired,
   setMoviePage: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
-  totalPages: PropTypes.number
+  totalPages: PropTypes.number.isRequired,
+  searchQuery: PropTypes.func.isRequired,
+  searchResult: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -137,5 +155,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getMovies,
   setMovieType,
-  setMoviePage
+  setMoviePage,
+  searchQuery,
+  searchResult
 })(Header);
