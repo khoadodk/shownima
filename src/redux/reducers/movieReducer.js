@@ -18,15 +18,15 @@ export default (state = initialState, action) => {
     case MOVIE_PAGE:
       return {
         ...state,
-        page: action.page,
-        totalPages: action.total_pages
+        page: action.payload.page,
+        totalPages: action.payload.totalPages
       };
     case LOAD_MORE:
       return {
         ...state,
-        list: [...state.list, ...action.payload],
-        page: action.page,
-        totalPages: action.total_pages
+        list: [...state.list, ...action.payload.results],
+        page: action.payload.page,
+        totalPages: action.payload.total_pages
       };
     case MOVIE_TYPE:
       return {

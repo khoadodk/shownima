@@ -30,6 +30,7 @@ const SlideShow = ({ images, auto, showArrows }) => {
         clearInterval(sliderInterval);
       };
     }
+    // eslint-disable-next-line
   }, [images]);
 
   const autoMoveSlide = () => {
