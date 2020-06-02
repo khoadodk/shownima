@@ -7,21 +7,30 @@ import SlideShow from '../slideShow/SlideShow';
 import Paginate from '../paginate/Paginate';
 import Grid from '../grid/Grid';
 import { IMAGE_URL } from '../../../services/movies.service';
+import { getMovies, setMoviePage } from '../../../redux/actions/movies';
 
-const MainContent = ({ list }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+const HEADER_TYPE = {
+  now_playing: 'Now Playing',
+  popular: 'Popular',
+  top_rated: 'Top Rated',
+  upcoming: 'Upcoming'
+};
+
+const MainContent = ({
+  list,
+  movieType,
+  totalPages,
+  page,
+  getMovies,
+  setMoviePage
+}) => {
+  const [currentPage, setCurrentPage] = useState(page);
   const [slideShowImages, setSlideShowImages] = useState([]);
+  const randomMovies = list
+    .sort(() => Math.random() - Math.random())
+    .slice(0, 4);
 
   useEffect(() => {
-    getSlideShowImages();
-    // eslint-disable-next-line
-  }, [list]);
-
-  const getSlideShowImages = () => {
-    const randomMovies = list
-      .sort(() => Math.random() - Math.random())
-      .slice(0, 4);
-
     if (randomMovies.length) {
       const IMAGES = [
         {
@@ -43,25 +52,35 @@ const MainContent = ({ list }) => {
       ];
       setSlideShowImages(IMAGES);
     }
-  };
+    // eslint-disable-next-line
+  }, [movieType]);
+
+  useEffect(() => {
+    setCurrentPage(page);
+    // eslint-disable-next-line
+  }, [page]);
 
   const paginate = (type) => {
-    if (type === 'prev' && currentPage >= 1) {
-      setCurrentPage((prev) => prev - 1);
+    let pageNum = currentPage;
+    if (type === 'prev') {
+      pageNum -= 1;
     } else {
-      setCurrentPage((prev) => prev + 1);
+      pageNum += 1;
     }
+    setCurrentPage(pageNum);
+    setMoviePage(pageNum, totalPages);
+    getMovies(movieType, pageNum);
   };
 
   return (
     <div className="main-content">
       <SlideShow images={slideShowImages} auto={true} showArrows={true} />
       <div className="grid-movie-title">
-        <div className="movieType">Now Playing</div>
+        <div className="movieType">{HEADER_TYPE[movieType]}</div>
         <div className="paginate">
           <Paginate
             currentPage={currentPage}
-            totalPages={10}
+            totalPages={totalPages}
             paginate={paginate}
           />
         </div>
@@ -72,11 +91,21 @@ const MainContent = ({ list }) => {
 };
 
 MainContent.propTypes = {
-  list: PropTypes.array.isRequired
+  list: PropTypes.array.isRequired,
+  page: PropTypes.number.isRequired,
+  totalPages: PropTypes.number,
+  movieType: PropTypes.string.isRequired,
+  getMovies: PropTypes.func.isRequired,
+  setMoviePage: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  list: state.movies.list
+  list: state.movies.list,
+  movieType: state.movies.movieType,
+  totalPages: state.movies.totalPages,
+  page: state.movies.page
 });
 
-export default connect(mapStateToProps, {})(MainContent);
+export default connect(mapStateToProps, { setMoviePage, getMovies })(
+  MainContent
+);

@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './Header.scss';
 import logo from '../../assets/logo.JPG';
-import { getMovies } from '../../redux/actions/movies';
+import {
+  getMovies,
+  setMovieType,
+  setMoviePage
+} from '../../redux/actions/movies';
 
 const HEADER_LIST = [
   {
@@ -32,19 +36,38 @@ const HEADER_LIST = [
   }
 ];
 
-const Header = ({ getMovies }) => {
+const Header = ({
+  getMovies,
+  setMoviePage,
+  setMovieType,
+  page,
+  totalPages
+}) => {
   let [navClass, setNavClass] = useState(false);
   let [menuClass, setMenuClass] = useState(false);
+  const [type, setType] = useState('now_playing');
 
   useEffect(() => {
-    getMovies('now_playing', 1);
-  }, []);
+    getMovies(type, page);
+    setMoviePage(page, totalPages);
+    // eslint-disable-next-line
+  }, [type]);
+
+  const setMovieTypeUrl = (type) => {
+    setType(type);
+    setMovieType(type);
+  };
 
   const toggleMenu = () => {
     menuClass = !menuClass;
     navClass = !navClass;
     setMenuClass(menuClass);
     setNavClass(navClass);
+    if (navClass) {
+      document.body.classList.add('header-nav-open');
+    } else {
+      document.body.classList.remove('header-nav-open');
+    }
   };
 
   return (
@@ -71,7 +94,15 @@ const Header = ({ getMovies }) => {
           }`}
         >
           {HEADER_LIST.map((data) => (
-            <li key={data.id} className="header-nav-item">
+            <li
+              key={data.id}
+              className={
+                data.type === type
+                  ? 'header-nav-item active-item'
+                  : 'header-nav-item'
+              }
+              onClick={() => setMovieTypeUrl(data.type)}
+            >
               <span className="header-list-name">
                 <i className={data.iconClass}></i>
               </span>
@@ -91,11 +122,20 @@ const Header = ({ getMovies }) => {
 };
 
 Header.propTypes = {
-  getMovies: PropTypes.func
+  getMovies: PropTypes.func.isRequired,
+  setMovieType: PropTypes.func.isRequired,
+  setMoviePage: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  totalPages: PropTypes.number
 };
 
 const mapStateToProps = (state) => ({
-  list: state.movies.list
+  page: state.movies.page,
+  totalPages: state.movies.totalPages
 });
 
-export default connect(mapStateToProps, { getMovies })(Header);
+export default connect(mapStateToProps, {
+  getMovies,
+  setMovieType,
+  setMoviePage
+})(Header);

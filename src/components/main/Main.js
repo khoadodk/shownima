@@ -7,13 +7,7 @@ import MainContent from '../content/mainContent/MainContent';
 import Spinner from '../spinner/Spinner';
 import { loadMore, setMoviePage } from '../../redux/actions/movies';
 
-const Main = ({
-  loadMore,
-  page,
-  totalPages,
-  setMoviePage,
-  movieType = 'now_playing'
-}) => {
+const Main = ({ loadMore, page, totalPages, setMoviePage, movieType }) => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(page);
   const mainRef = useRef();
@@ -28,6 +22,7 @@ const Main = ({
 
   useEffect(() => {
     setMoviePage(currentPage, totalPages);
+    // eslint-disable-next-line
   }, [currentPage]);
 
   const fetchData = () => {
