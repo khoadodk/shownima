@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './Header.scss';
 import logo from '../../assets/logo.JPG';
+import { useHistory } from 'react-router-dom';
 import {
   getMovies,
   setMovieType,
@@ -51,6 +52,7 @@ const Header = ({
   let [menuClass, setMenuClass] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [type, setType] = useState('now_playing');
+  const history = useHistory();
 
   useEffect(() => {
     getMovies(type, page);
@@ -84,11 +86,15 @@ const Header = ({
     }
   };
 
+  const navigateToHome = () => {
+    history.push('/');
+  };
+
   return (
     <div className="header-nav-wrapper">
       <div className="header-bar"></div>
       <div className="header-navbar">
-        <div className="header-image">
+        <div className="header-image" onClick={() => navigateToHome()}>
           <img src={logo} alt="logo" />
         </div>
         <div
