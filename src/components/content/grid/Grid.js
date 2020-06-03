@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import './Grid.scss';
+import { Link } from 'react-router-dom';
 
 import { IMAGE_URL } from '../../../services/movies.service';
 import Rating from '../rating/Rating';
@@ -15,6 +16,11 @@ const Grid = ({ list }) => {
     setMovieData(list);
   }, [list]);
 
+  const formatMovieTitle = (title) => {
+    const titleStr = title.toLowerCase();
+    return titleStr.replace(/ /g, '-');
+  };
+
   return (
     <>
       <div className="grid">
@@ -26,7 +32,12 @@ const Grid = ({ list }) => {
               alt="placeholder"
             >
               <div className="grid-read-more">
-                <button className="grid-cell-button">Read More</button>
+                <Link
+                  className="grid-cell-button"
+                  to={`/${data.id}/${formatMovieTitle(data.title)}/details`}
+                >
+                  Read More
+                </Link>
               </div>
               <div className="grid-detail">
                 <span className="grid-detail-title">{data.title}</span>
