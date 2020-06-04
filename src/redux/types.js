@@ -5,3 +5,5 @@ export const LOAD_MORE = 'LOAD_MORE';
 export const MOVIE_TYPE = 'MOVIE_TYPE';
 export const SEARCH_QUERY = 'SEARCH_QUERY';
 export const SEARCH_RESULT = 'SEARCH_RESULT';
+export const MOVIE_DETAILS = 'MOVIE_DETAILS';
+export const CLEAR_MOVIE_DETAILS = 'CLEAR_MOVIE_DETAILS';

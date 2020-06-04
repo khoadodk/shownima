@@ -16,6 +16,9 @@
   color: var(--lightBlue);
   padding-bottom: 15px;
   margin-right: 50px;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .tab-list-active {
