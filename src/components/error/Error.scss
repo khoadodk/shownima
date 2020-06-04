@@ -1,0 +1,33 @@
+.error-page {
+  color: var(--mainWhite);
+  line-height: 1.5;
+  height: 100vh;
+
+  .error-link {
+    text-align: center;
+    a {
+      text-decoration: none;
+      color: var(--mainWhite);
+      font-size: 1.2rem;
+      border: 1px solid var(--borderColor);
+      padding: 0.5em;
+      border-radius: 3px;
+      &:hover {
+        color: var(--primaryColor);
+      }
+    }
+  }
+
+  .error-msg {
+    font-size: 2em;
+    text-align: center;
+    font-weight: 100;
+    margin-bottom: 3rem;
+  }
+
+  .error-header {
+    text-align: center;
+    font-size: 10em;
+    font-weight: 100;
+  }
+}
