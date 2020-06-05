@@ -16,11 +16,6 @@ const Grid = ({ list }) => {
     setMovieData(list);
   }, [list]);
 
-  const formatMovieTitle = (title) => {
-    const titleStr = title.toLowerCase();
-    return titleStr.replace(/ /g, '-');
-  };
-
   return (
     <>
       <div className="grid">
@@ -32,10 +27,7 @@ const Grid = ({ list }) => {
               alt="placeholder"
             >
               <div className="grid-read-more">
-                <Link
-                  className="grid-cell-button"
-                  to={`/${data.id}/${formatMovieTitle(data.title)}/details`}
-                >
+                <Link className="grid-cell-button" to={`/${data.id}/details`}>
                   Read More
                 </Link>
               </div>

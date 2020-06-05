@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import './Search.scss';
 import '../grid/Grid.scss';
 
@@ -29,7 +30,9 @@ const Search = ({ searchResult }) => {
                 alt="placeholder"
               >
                 <div className="grid-read-more">
-                  <button className="grid-cell-button">Read More</button>
+                  <Link className="grid-cell-button" to={`/${data.id}/details`}>
+                    Read More
+                  </Link>
                 </div>
                 <div className="grid-detail">
                   <span className="grid-detail-title">{data.title}</span>

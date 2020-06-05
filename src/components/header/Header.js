@@ -59,7 +59,7 @@ const Header = ({
 
   const location = useLocation();
   const history = useHistory();
-  const detailsRoute = useRouteMatch('/:id/:name/details');
+  const detailsRoute = useRouteMatch('/:id/details');
 
   useEffect(() => {
     getMovies(type, page);
@@ -88,11 +88,11 @@ const Header = ({
   const setMovieTypeUrl = (type) => {
     // Switch to movietype page when navigate while in details page
     setDisableSearch(false);
-    clearMovieDetails();
     if (location.pathname !== '/') {
+      clearMovieDetails();
       history.push('/');
       setType(type);
-      setType(type);
+      setMovieType(type);
     } else {
       setType(type);
       setMovieType(type);
@@ -163,7 +163,7 @@ const Header = ({
               <input
                 type="text"
                 className={`search-input ${disableSearch && 'disabled'}`}
-                placeholder="Search By Movie Name"
+                placeholder="Search Movie By Name"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
