@@ -6,6 +6,7 @@ import './Main.scss';
 import MainContent from '../content/mainContent/MainContent';
 import Spinner from '../spinner/Spinner';
 import { loadMore, setMoviePage } from '../../redux/actions/movies';
+import { pathUrl } from '../../redux/actions/routes';
 import Search from '../content/search/Search';
 
 const Main = ({
@@ -15,7 +16,10 @@ const Main = ({
   setMoviePage,
   movieType,
   searchQuery,
-  searchResult
+  searchResult,
+  pathUrl,
+  match,
+  error
 }) => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(page);
@@ -23,10 +27,12 @@ const Main = ({
   const bottomLineRef = useRef();
 
   useEffect(() => {
+    pathUrl(match.path, match.url);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
     }, 2000);
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -54,17 +60,19 @@ const Main = ({
 
   return (
     <>
-      <div className="main" ref={mainRef} onScroll={handleScroll}>
-        {loading ? (
-          <Spinner />
-        ) : (
-          <>
-            {!searchQuery && <MainContent />}
-            {searchQuery && searchResult && <Search />}
-          </>
-        )}
-        <div ref={bottomLineRef} />
-      </div>
+      {!error.message && !error.statusCode && (
+        <div className="main" ref={mainRef} onScroll={handleScroll}>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <>
+              {!searchQuery && <MainContent />}
+              {searchQuery && searchResult && <Search />}
+            </>
+          )}
+          <div ref={bottomLineRef} />
+        </div>
+      )}
     </>
   );
 };
@@ -77,7 +85,8 @@ Main.propTypes = {
   setMoviePage: PropTypes.func.isRequired,
   movieType: PropTypes.string.isRequired,
   searchResult: PropTypes.array.isRequired,
-  searchQuery: PropTypes.string.isRequired
+  searchQuery: PropTypes.string.isRequired,
+  pathUrl: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -86,7 +95,10 @@ const mapStateToProps = (state) => ({
   totalPages: state.movies.totalPages,
   movieType: state.movies.movieType,
   searchResult: state.movies.searchResult,
-  searchQuery: state.movies.searchQuery
+  searchQuery: state.movies.searchQuery,
+  error: state.error
 });
 
-export default connect(mapStateToProps, { loadMore, setMoviePage })(Main);
+export default connect(mapStateToProps, { loadMore, setMoviePage, pathUrl })(
+  Main
+);

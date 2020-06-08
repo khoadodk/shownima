@@ -25,10 +25,17 @@ export const getMovies = (type, pages) => async (dispatch) => {
     const { results, page, total_pages } = response.data;
     dispatch({ type: MOVIE_LIST, payload: results });
     dispatch({ type: MOVIE_PAGE, payload: { page, totalPages: total_pages } });
-    console.log('GET MOVIES ACTION', type, pages);
+    // console.log('GET MOVIES ACTION', type, pages);
   } catch (error) {
     if (error.response) {
-      dispatch({ type: SET_ERROR, payload: error.response.data.message });
+      dispatch({
+        type: SET_ERROR,
+        payload: {
+          message:
+            error.response.data.message || error.response.data.status_message,
+          statusCode: error.response.status
+        }
+      });
     }
   }
 };
@@ -38,17 +45,23 @@ export const loadMore = (type, pages) => async (dispatch) => {
     const response = await MOVIE_API_URL(type, pages);
     const { results, page, total_pages } = response.data;
     dispatch({ type: LOAD_MORE, payload: { results, page, total_pages } });
-    console.log('LOAD MORE ACTION', type, pages);
+    // console.log('LOAD MORE ACTION', type, pages);
   } catch (error) {
     if (error.response) {
-      dispatch({ type: SET_ERROR, payload: error.response.data.message });
+      dispatch({
+        type: SET_ERROR,
+        payload: {
+          message:
+            error.response.data.message || error.response.data.status_message,
+          statusCode: error.response.status
+        }
+      });
     }
   }
 };
 
 export const setMoviePage = (page, totalPages) => async (dispatch) => {
-  console.log('SET MOVIE PAGE ACTION', page, totalPages);
-
+  // console.log('SET MOVIE PAGE ACTION', page, totalPages);
   dispatch({ type: MOVIE_PAGE, payload: { page, totalPages } });
 };
 
@@ -58,7 +71,7 @@ export const setMovieType = (type) => async (dispatch) => {
 };
 
 export const searchQuery = (query) => async (dispatch) => {
-  console.log('SEARCH QUERY ACTION', query);
+  // console.log('SEARCH QUERY ACTION', query);
   dispatch({ type: SEARCH_QUERY, payload: query });
 };
 
@@ -73,7 +86,14 @@ export const searchResult = (query) => async (dispatch) => {
     }
   } catch (error) {
     if (error.response) {
-      dispatch({ type: SET_ERROR, payload: error.response.data.message });
+      dispatch({
+        type: SET_ERROR,
+        payload: {
+          message:
+            error.response.data.message || error.response.data.status_message,
+          statusCode: error.response.status
+        }
+      });
     }
   }
 };
@@ -98,7 +118,14 @@ export const movieDetails = (id) => async (dispatch) => {
     dispatch({ type: MOVIE_DETAILS, payload: response });
   } catch (error) {
     if (error.response) {
-      dispatch({ type: SET_ERROR, payload: error.response.data.message });
+      dispatch({
+        type: SET_ERROR,
+        payload: {
+          message:
+            error.response.data.message || error.response.data.status_message,
+          statusCode: error.response.status
+        }
+      });
     }
   }
 };

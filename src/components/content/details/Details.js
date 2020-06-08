@@ -11,13 +11,17 @@ import Crew from './crew/Crew';
 import Media from './media/Media';
 import Reviews from './reviews/Reviews';
 import { movieDetails } from '../../../redux/actions/movies';
+import { pathUrl } from '../../../redux/actions/routes';
 import { IMAGE_URL } from '../../../services/movies.service';
 
-const Details = ({ movieDetails, movie }) => {
+const Details = ({ movieDetails, movie, pathUrl, match }) => {
   const [details, setDetails] = useState();
   const { id } = useParams();
 
   useEffect(() => {
+    // store path and url in redux store
+    pathUrl(match.path, match.url);
+
     if (movie.length === 0) {
       movieDetails(id);
     }
@@ -86,11 +90,12 @@ const Details = ({ movieDetails, movie }) => {
 
 Details.propTypes = {
   movie: PropTypes.array.isRequired,
-  movieDetails: PropTypes.func.isRequired
+  movieDetails: PropTypes.func.isRequired,
+  pathUrl: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   movie: state.movies.movie
 });
 
-export default connect(mapStateToProps, { movieDetails })(Details);
+export default connect(mapStateToProps, { movieDetails, pathUrl })(Details);
