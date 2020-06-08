@@ -12,6 +12,8 @@ import {
   searchResult,
   clearMovieDetails
 } from '../../redux/actions/movies';
+import { pathUrl } from '../../redux/actions/routes';
+import { setError } from '../../redux/actions/errors';
 
 const HEADER_LIST = [
   {
@@ -48,7 +50,13 @@ const Header = ({
   totalPages,
   searchQuery,
   searchResult,
-  clearMovieDetails
+  clearMovieDetails,
+  routesArray,
+  path,
+  url,
+  pathUrl,
+  setError,
+  error
 }) => {
   let [navClass, setNavClass] = useState(false);
   let [menuClass, setMenuClass] = useState(false);
@@ -61,20 +69,57 @@ const Header = ({
   const history = useHistory();
   const detailsRoute = useRouteMatch('/:id/details');
 
+  // Set up custom error
   useEffect(() => {
-    getMovies(type, page);
-    setMoviePage(page, totalPages);
-    //Only show header on details and home page
-    if (location.pathname === '/' || detailsRoute) {
-      setHideHeader(true);
-    }
-
-    // Turn off search function on details page
-    if (location.pathname !== '/' && location.key) {
-      setDisableSearch(true);
+    if (routesArray.length) {
+      if (!path && !url) {
+        // pass as props to Error page to navigate back home
+        pathUrl('/', '/');
+        const error = new Error(
+          `404. Page with pathname ${location.pathname} not found!`
+        );
+        setError({
+          message: `Page with pathname ${location.pathname} not found!`,
+          statusCode: 404
+        });
+        throw error;
+      }
     }
     // eslint-disable-next-line
-  }, [type, disableSearch, location]);
+  }, [path, url, routesArray, pathUrl]);
+
+  // Custom error from API request
+  useEffect(() => {
+    if (error.message || error.statusCode) {
+      pathUrl('/', '/');
+      const errorAPI = new Error(
+        `${error.message} with status code ${error.statusCode}`
+      );
+      setError({
+        message: `Page with pathname ${location.pathname} not found!`,
+        statusCode: 404
+      });
+      throw errorAPI;
+    }
+    // eslint-disable-next-line
+  }, [error]);
+
+  useEffect(() => {
+    if (path && !error.message && !error.statusCode) {
+      getMovies(type, page);
+      setMoviePage(page, totalPages);
+      //Only show header on details and home page
+      if (location.pathname === '/' || detailsRoute) {
+        setHideHeader(true);
+      }
+
+      // Turn off search function on details page
+      if (location.pathname !== '/' && location.key) {
+        setDisableSearch(true);
+      }
+    }
+    // eslint-disable-next-line
+  }, [type, disableSearch, location, path, error]);
 
   const handleSearchChange = (e) => {
     let query = e.target.value;
@@ -183,12 +228,22 @@ Header.propTypes = {
   totalPages: PropTypes.number.isRequired,
   searchQuery: PropTypes.func.isRequired,
   searchResult: PropTypes.func.isRequired,
-  clearMovieDetails: PropTypes.func.isRequired
+  clearMovieDetails: PropTypes.func.isRequired,
+  routesArray: PropTypes.array.isRequired,
+  path: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  pathUrl: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+  error: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
   page: state.movies.page,
-  totalPages: state.movies.totalPages
+  totalPages: state.movies.totalPages,
+  routesArray: state.routes.routesArray,
+  path: state.routes.path,
+  url: state.routes.url,
+  error: state.error
 });
 
 export default connect(mapStateToProps, {
@@ -197,5 +252,7 @@ export default connect(mapStateToProps, {
   setMoviePage,
   searchQuery,
   searchResult,
-  clearMovieDetails
+  clearMovieDetails,
+  pathUrl,
+  setError
 })(Header);

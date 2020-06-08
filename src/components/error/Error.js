@@ -1,20 +1,33 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
 import './Error.scss';
 
-const ErrorPage = () => {
+import { setError } from '../../redux/actions/errors';
+
+const ErrorPage = ({ clearState, setError }) => {
+  const history = useHistory();
+
+  const navigateToHome = () => {
+    clearState();
+    setError({ message: '', statusCode: null });
+    history.push('/');
+  };
+
   return (
     <div className="error-page">
       <h1 className="error-header">Oops!</h1>
-      <p className="error-msg">Something went wrong.</p>
-      <div className="error-link">
-        <Link to={'/'}>
-          <i className="icon-home"></i> Go back to home page.
-        </Link>
+      <p className="error-msg">Somethings went wrong.</p>
+      <div className="error-link" onClick={() => navigateToHome()}>
+        <i className="icon-home"></i> Go back to home page.
       </div>
     </div>
   );
 };
 
-export default ErrorPage;
+ErrorPage.propTypes = {
+  clearState: PropTypes.func.isRequired
+};
+
+export default connect(null, { setError })(ErrorPage);
