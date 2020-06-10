@@ -100,7 +100,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - *restore-cache
-      - run: docker login -u "${DOCKER_HUB_USER}" --password-stdin "${DOCKER_HUB_PASSWORD}"
+      - run: docker login --username "${DOCKER_HUB_USER}" --password-stdin "${DOCKER_HUB_PASSWORD}"
       - run: docker build -t ${IMAGE_NAME}:latest .
       - run:
           name: Tag and push to docker hub
@@ -208,7 +208,7 @@ workflows:
                 - master
       - deploy-to-aws-s3:
           requires:
-            - unit-test
+            - publish-to-docker-hub
           filters:
             branches:
               only:
