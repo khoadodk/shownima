@@ -12,7 +12,7 @@ executors:
       - image: cibuilds/base:latest
     resource_class: small
   docker-publisher:
-    environment: 
+    environment:
       IMAGE_NAME: dkkhoa/shownima
     docker:
       - image: circleci/buildpack-deps:stretch
@@ -93,16 +93,16 @@ jobs:
       - run:
           name: Run unit test
           command: npm run test
-  
+
   publish-to-docker-hub:
     executor: docker-publisher
-    steps: 
+    steps:
       - checkout
       - setup_remote_docker
-      - *restore_cache
+      - *restore-cache
       - run: docker login -u "${DOCKER_HUB_USER}" -p "${DOCKER_HUB_PASSWORD}"
-      - run: docker build -t ${IMAGE_NAME}:latest . 
-      - run: 
+      - run: docker build -t ${IMAGE_NAME}:latest .
+      - run:
           name: Tag and push to docker hub
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]
